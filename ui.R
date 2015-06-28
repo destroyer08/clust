@@ -26,8 +26,8 @@ shinyUI(fluidPage(theme = "bootstrap.css",
                   
                   
                   title = "Cluster Analysis",
-                  h3("Cluster Analysis",align="center"),
-                  
+                  h2("Cluster Analysis by AnaThin",align="center",style = "font-family: 'Jokerman'; font-si16pt;color:skyblue"),
+                  br(),
                   #fluidRow(column(3,h5("File/Study:"),verbatimTextOutput("code"))),h3("Cluster Analysis",align="center")),
                   hr(),
                   #  br(),
