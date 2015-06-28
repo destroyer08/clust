@@ -4,6 +4,7 @@ library(devtools)
 library(dplyr)
 library(fmsb)
 library(dataframes2xls)
+require(reshape)
 #advance
 library(ggplot2)
 library(plotrix)
@@ -158,9 +159,17 @@ shinyServer(function(input, output, session)
     {
       "Clusters are formed with K-means cluster algorithm. Distributions are:"
     }
-    else if(input$selection == "Statistical Analysis")
+    else if(input$selection == "Statistical Analysis" && input$op_selection == "Means")
     {
-      "It represents Mean, standard Deviation and Standard Score for clusters."
+      "It represents Mean values of products for each cluster."
+    }
+    else if(input$selection == "Statistical Analysis" && input$op_selection == "Standard Deviation")
+    {
+      "It represents standard Deviation values of products for each clusters."
+    }
+    else if(input$selection == "Statistical Analysis" &&input$op_selection == "Standard Score")
+    {
+      "It represents Standard Score values of products for each cluster."
     }
     else if(input$selection == "Scope Chart")
     {
@@ -465,42 +474,64 @@ shinyServer(function(input, output, session)
       
       x <- data.frame(round(clusters()$centers,2))
       names(x) <- paste("Var",input$vars[1]:input$vars[2],sep="-")
+      x <- data.frame(t(x))
+      x$Product <- input$vars[1]:input$vars[2]
+      
+      df <- melt(x ,  id = 'Product', variable_name = 'Cluster')
       par(mar = c(6.1, 2.1, 0, 1))
-      radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
-      y <- 1:input$nclust
-      legend(1.5,1.25,
-             legend=y,
-             pch=c(15,16),
-             col=unique(y),
-             lty=c(1,2),seg.len=0.5, title="Cluster")
+      p <-ggplot(df, aes(Product,value)) + geom_line(aes(colour = Cluster))+
+        scale_x_continuous(breaks=input$vars[1]:input$vars[2])
+      print(p)
+      return()
+      #radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
+      #y <- 1:input$nclust
+      #legend(1.5,1.25,
+      #       legend=y,
+       #      pch=c(15,16),
+       #      col=unique(y),
+        #     lty=c(1,2),seg.len=0.5, title="Cluster")
       #mtext("Mean Radar Chart", side = 1, line=-1,outer = TRUE)
     }
     if(input$selection == "Statistical Analysis" && input$op_selection == "Standard Deviation")
     {
       x <- data.frame(t(round(sdev(),2)))
       names(x) <- paste("Var",input$vars[1]:input$vars[2],sep="-")
+      x <- data.frame(t(x))
+      x$Product <- input$vars[1]:input$vars[2]
+      df <- melt(x ,  id = 'Product', variable_name = 'Cluster')
       par(mar = c(6.1, 2.1, 0, 1))
-      radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
-      y <- 1:input$nclust
-      legend(1.5,1,
-             legend=y,
-             pch=c(15,16),
-             col=unique(y),
-             lty=c(1,2),seg.len=0.5, title="Cluster")
+      p <-ggplot(df, aes(Product,value)) + geom_line(aes(colour = Cluster))+
+        scale_x_continuous(breaks=input$vars[1]:input$vars[2])
+      print(p)
+      return()
+      #radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
+      #y <- 1:input$nclust
+      #legend(1.5,1,
+       ##      pch=c(15,16),
+        #     col=unique(y),
+        #     lty=c(1,2),seg.len=0.5, title="Cluster")
       #mtext("SD Radar Chart", side = 1, line=-1,outer = TRUE)
     }
     if(input$selection == "Statistical Analysis" && input$op_selection == "Standard Score")
     {
       x <- data.frame(round(clustersStd()$centers,2))
       names(x) <- paste("Var",input$vars[1]:input$vars[2],sep="-")
+      x <- data.frame(t(x))
+      x$Product <- input$vars[1]:input$vars[2]
+      df <- melt(x ,  id = 'Product', variable_name = 'Cluster')
       par(mar = c(6.1, 2.1, 0, 1))
-      radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
-      y <- 1:input$nclust
-      legend(1.5,1,
-             legend=y,
-             pch=c(15,16),
-             col=unique(y),
-             lty=c(1,2),seg.len=0.5, title="Cluster")
+      p <-ggplot(df, aes(Product,value)) + geom_line(aes(colour = Cluster))+
+        scale_x_continuous(breaks=input$vars[1]:input$vars[2])
+      print(p)
+      return()
+      #par(mar = c(6.1, 2.1, 0, 1))
+      #radarchart(x,max=F,axistype=3,na.itp=F,axis=8)
+      #y <- 1:input$nclust
+      #legend(1.5,1,
+       #      legend=y,
+       #      pch=c(15,16),
+       #      col=unique(y),
+       #      lty=c(1,2),seg.len=0.5, title="Cluster")
       #mtext("SD Radar Chart", side = 1, line=-1,outer = TRUE)
     }
  
