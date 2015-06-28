@@ -91,7 +91,9 @@ shinyUI(fluidPage(theme = "bootstrap.css",
                            #tableOutput("clust"),
                            tableOutput("stdev")
                            #plotOutput('plot1'),
-                  )
+                  ),
+                  h6(tags$b("@ copyright 2015. Pratik Dekate. All rights reserved."),align="center")
+                  
                   
                   
                   

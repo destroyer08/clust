@@ -72,7 +72,7 @@ shinyServer(function(input, output, session)
     if(nrow(df) == 0)
       return(null)
   selectInput('selection','Options',
-              c("Overview","Statistical Analysis","Cluster Plot","Scope Chart"))
+              c("Overview","Cluster Plot","Statistical Analysis","Scope Chart"))
   })
   output$subdia <- renderUI({
     if(input$selection != "Statistical Analysis")
@@ -166,7 +166,7 @@ shinyServer(function(input, output, session)
     {
       a <- summary(pca2())
       b <- ((a$importance[2,1]+a$importance[2,2])*100)
-      paste("Arrow shows trend of a variable in observations in",b,"% variance of total data. That represents accuracy of graph. Calculated PC's are:",collapse=" ")
+      paste("Arrow shows trend of a variable in observations in",b,"% variance of total data. That represents accuracy of graph. Calculated Principal Compo-nents are:",collapse=" ")
     }
     else
       return()
@@ -200,7 +200,7 @@ shinyServer(function(input, output, session)
       
       
       x <- rbind(clusters()$size,x)
-      y <- paste("(Var",paste(input$vars[1]:input$vars[2],")",sep=""),sep="-")
+      y <- paste("(Var",paste((input$vars[1]-1):input$vars[2],")",sep=""),sep="-")
       rownames(x) <- paste(rownames(x),y,sep=": ")
       
       rownames(x)[1] <-"Respondent Count"
@@ -223,7 +223,7 @@ shinyServer(function(input, output, session)
       
       
       x <- rbind(clusters()$size,x)
-      y <- paste("(Var",paste(input$vars[1]:input$vars[2],")",sep=""),sep="-")
+      y <- paste("(Var",paste((input$vars[1]-1):input$vars[2],")",sep=""),sep="-")
       rownames(x) <- paste(rownames(x),y,sep=": ")
       rownames(x)[1] <-"Respondent Count"
       
@@ -269,7 +269,7 @@ shinyServer(function(input, output, session)
       x <- data.frame(sdev())
       x <- rbind(clusters()$size,x)
       names(x) <- paste("Cluster",1:input$nclust,sep="-")
-      y <- paste("(Var",paste(input$vars[1]:input$vars[2],")",sep=""),sep="-")
+      y <- paste("(Var",paste((input$vars[1]-1):input$vars[2],")",sep=""),sep="-")
       rownames(x) <- paste(rownames(x),y,sep=": ")
       rownames(x)[1] <-"Respondent Count"
       
